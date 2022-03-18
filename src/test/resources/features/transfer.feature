@@ -5,7 +5,7 @@ Feature: transfer
 Background:
     Given a customer with id 1 and pin 111 with balance 200 exists
     And a customer with id 2 and pin 222 with balance 50 exists
-    And I login to ATM with id 1 and pin 111
+    When I login to ATM with id 1 and pin 111
 
 Scenario: Transfer amount less than my balance
     When I transfer 20 to customer id 2
