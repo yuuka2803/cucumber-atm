@@ -3,36 +3,34 @@ package ku.atm;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
-   A bank contains customers with bank accounts.
-*/
 public class Bank {
-   /**
-      Constructs a bank with no customers.
-   */
-   public Bank() {
-      customers = new HashMap<Integer, Customer>();
+   private String name;
+   private Map<Integer, Customer> customers;
+
+   public Bank(String name) {
+      this.name = name;
+      this.customers = new HashMap<>();
    }
 
-   /**
-      Adds a customer to the bank.
-      @param c the customer to add
-   */
-   public void addCustomer(Customer c) {
-      customers.put(c.getCustomerNumber(), c);
+   public void openAccount(Customer c) {
+      customers.put(c.getId(), c);
    }
-   
-   /** 
-      Finds a customer in the bank.
-      @param aNumber a customer number
-      @return the matching customer, or null if no customer
-      matches
-   */
-   public Customer findCustomer(int aNumber) {
-	  return customers.get(aNumber);
+
+   public Customer getCustomer(int id) {
+      return customers.get(id);
    }
-   
-   private Map<Integer, Customer> customers;
+
+   public Customer matchCustomer(int id, int pin) {
+      Customer customer = customers.get(id);
+      if (customer != null && customer.match(pin))
+         return customer;
+      return null;
+   }
+
+   public void transfer(int givingId, int receivedId, double amount) throws NotEnoughBalanceException {
+      customers.get(givingId).getAccount().withdraw(amount);
+      customers.get(receivedId).getAccount().deposit(amount);
+   }
 }
 
 

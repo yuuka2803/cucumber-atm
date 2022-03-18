@@ -15,18 +15,18 @@ public class StepDefATM {
 
     @Before
     public void init() {
-        bank = new Bank();
+        bank = new Bank("KU Bank");
         atm = new ATM(bank);
     }
 
     @Given("a customer with id {int} and pin {int} exists")
     public void a_customer_with_id_and_pin_exists(int id, int pin) {
-        bank.addCustomer(new Customer(id, pin));
+        bank.openAccount(new Customer(id, pin));
     }
 
     @Given("a customer with id {int} and pin {int} with balance {float} exists")
     public void a_customer_with_id_and_pin_with_balance_exists(int id, int pin, double balance) {
-        bank.addCustomer(new Customer(id, pin, balance));
+        bank.openAccount(new Customer(id, pin, balance));
     }
 
     @When("I login to ATM with id {int} and pin {int}")
@@ -67,7 +67,7 @@ public class StepDefATM {
     @Then("customer id {int} account balance is {float}")
     public void customer_id_account_balance_is(int id, double balance) {
         assertEquals(balance,
-                     bank.findCustomer(id).getAccount().getBalance());
+                     bank.getCustomer(id).getAccount().getBalance());
     }
 
 }
