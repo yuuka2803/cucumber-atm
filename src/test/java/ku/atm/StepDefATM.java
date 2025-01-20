@@ -12,11 +12,13 @@ public class StepDefATM {
     ATM atm;
     Bank bank;
     boolean validLogin;
+    Customer account;
 
     @Before
     public void init() {
         bank = new Bank("KU Bank");
         atm = new ATM(bank);
+
     }
 
     @Given("a customer with id {int} and pin {int} exists")
@@ -31,6 +33,7 @@ public class StepDefATM {
 
     @When("I login to ATM with id {int} and pin {int}")
     public void i_login_to_ATM_with_id_and_pin(int id, int pin) {
+        account = bank.matchCustomer(id, pin);
         validLogin = atm.validateCustomer(id, pin);
     }
 
@@ -42,6 +45,12 @@ public class StepDefATM {
     @Then("I cannot login")
     public void i_cannot_login() {
         assertFalse(validLogin);
+    }
+
+    @Then("This ID does not exist")
+    public void this_id_does_not_exist() {
+       assertNull(account);
+
     }
 
     @When("I withdraw {float} from ATM")
@@ -68,6 +77,16 @@ public class StepDefATM {
     public void customer_id_account_balance_is(int id, double balance) {
         assertEquals(balance,
                      bank.getCustomer(id).getAccount().getBalance());
+    }
+
+
+    @When("I deposit {float} from ATM")
+    public void  i_deposit_from_ATM(float amount)  {
+        atm.deposit(amount);
+    }
+    @Then("My account balance update to {float}.")
+    public void my_account_balance_update_to(float amount) {
+        assertEquals(amount, atm.getBalance());
     }
 
 }
